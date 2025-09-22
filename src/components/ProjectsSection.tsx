@@ -1,41 +1,93 @@
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Home, Building, Factory } from "lucide-react";
+import { ArrowRight, Home, Building, Factory, Calendar, MapPin } from "lucide-react";
+
+interface Project {
+  id: string;
+  title: string;
+  description?: string;
+  image_url?: string;
+  location?: string;
+  project_type?: string;
+  status: 'ongoing' | 'completed' | 'planned';
+  start_date?: string;
+  end_date?: string;
+  is_featured: boolean;
+  display_order: number;
+}
 
 const ProjectsSection = () => {
-  const projects = [
-    {
-      category: "Residencial",
-      icon: Home,
-      title: "Moradia Moderna em Lisboa",
-      description: "Construção completa de moradia de luxo com 4 quartos, jardim paisagístico e sistema de automação residencial.",
-      image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      tags: ["Construção Civil", "Instalações Elétricas", "Design Moderno"],
-      area: "320m²",
-      duration: "8 meses"
+  const { data: projects, isLoading } = useQuery({
+    queryKey: ['projects'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('is_featured', true)
+        .order('display_order')
+        .limit(6);
+      
+      if (error) throw error;
+      return data as Project[];
     },
-    {
-      category: "Comercial", 
-      icon: Building,
-      title: "Centro Empresarial Porto",
-      description: "Reabilitação completa de edifício comercial com escritórios modernos e sistemas de eficiência energética.",
-      image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      tags: ["Reabilitação", "Eficiência Energética", "Comercial"],
-      area: "1.200m²", 
-      duration: "12 meses"
-    },
-    {
-      category: "Industrial",
-      icon: Factory,
-      title: "Armazém Logístico Aveiro",
-      description: "Construção de complexo industrial com sistemas automatizados e infraestrutura para logística avançada.",
-      image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      tags: ["Industrial", "Automação", "Logística"],
-      area: "2.500m²",
-      duration: "10 meses"
+  });
+
+  const getIcon = (projectType?: string) => {
+    switch (projectType?.toLowerCase()) {
+      case 'residencial':
+        return Home;
+      case 'comercial':
+        return Building;
+      case 'industrial':
+        return Factory;
+      default:
+        return Building;
     }
-  ];
+  };
+
+  const getStatusBadge = (status: string) => {
+    const statusMap = {
+      ongoing: { label: 'Em Andamento', color: 'bg-yellow-100 text-yellow-800' },
+      completed: { label: 'Concluído', color: 'bg-green-100 text-green-800' },
+      planned: { label: 'Planejado', color: 'bg-blue-100 text-blue-800' }
+    };
+    return statusMap[status as keyof typeof statusMap] || statusMap.completed;
+  };
+
+  if (isLoading) {
+    return (
+      <section id="projetos" className="py-20 bg-construction-light-gray">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-accent/10 border border-accent/20 text-accent font-medium mb-6">
+              Projetos Realizados
+            </div>
+            <h2 className="section-title mb-6">
+              Qualidade Comprovada em{" "}
+              <span className="bg-gradient-to-r from-accent to-accent/80 bg-clip-text text-transparent">
+                Cada Projeto
+              </span>
+            </h2>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(6)].map((_, i) => (
+              <Card key={i} className="construction-card animate-pulse">
+                <div className="h-64 bg-muted rounded-t-lg"></div>
+                <CardContent className="p-6">
+                  <div className="h-6 bg-muted rounded mb-2"></div>
+                  <div className="h-4 bg-muted rounded mb-4"></div>
+                  <div className="h-4 bg-muted rounded w-3/4"></div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="projetos" className="py-20 bg-construction-light-gray">
@@ -61,61 +113,80 @@ const ProjectsSection = () => {
 
         {/* Projects Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {projects.map((project, index) => (
-            <Card 
-              key={index} 
-              className="group construction-card overflow-hidden h-full animate-fade-up hover:shadow-construction"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              {/* Project Image */}
-              <div className="relative h-64 overflow-hidden">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute top-4 left-4">
-                  <Badge className="bg-accent/90 text-accent-foreground font-medium">
-                    <project.icon className="w-3 h-3 mr-1" />
-                    {project.category}
-                  </Badge>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-              </div>
+          {projects?.map((project, index) => {
+            const IconComponent = getIcon(project.project_type);
+            const statusInfo = getStatusBadge(project.status);
 
-              <CardContent className="p-6 space-y-4">
-                <h3 className="text-xl font-bold text-primary group-hover:text-accent transition-colors">
-                  {project.title}
-                </h3>
-                
-                <p className="text-muted-foreground leading-relaxed">
-                  {project.description}
-                </p>
-
-                {/* Project Stats */}
-                <div className="flex justify-between text-sm text-muted-foreground bg-construction-light-blue/30 rounded-lg p-3">
-                  <div>
-                    <span className="font-medium text-primary">Área:</span> {project.area}
+            return (
+              <Card 
+                key={project.id} 
+                className="group construction-card overflow-hidden h-full animate-fade-up hover:shadow-construction"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                {/* Project Image */}
+                <div className="relative h-64 overflow-hidden">
+                  <img
+                    src={project.image_url || '/api/placeholder/800/400'}
+                    alt={project.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => {
+                      e.currentTarget.src = '/api/placeholder/800/400?text=Projeto';
+                    }}
+                  />
+                  <div className="absolute top-4 left-4">
+                    <Badge className="bg-accent/90 text-accent-foreground font-medium">
+                      <IconComponent className="w-3 h-3 mr-1" />
+                      {project.project_type || 'Projeto'}
+                    </Badge>
                   </div>
-                  <div>
-                    <span className="font-medium text-primary">Duração:</span> {project.duration}
+                  <div className="absolute top-4 right-4">
+                    <Badge className={`font-medium ${statusInfo.color}`}>
+                      {statusInfo.label}
+                    </Badge>
                   </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                 </div>
 
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag, tagIndex) => (
-                    <span
-                      key={tagIndex}
-                      className="px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                <CardContent className="p-6 space-y-4">
+                  <h3 className="text-xl font-bold text-primary group-hover:text-accent transition-colors">
+                    {project.title}
+                  </h3>
+                  
+                  {project.description && (
+                    <p className="text-muted-foreground leading-relaxed">
+                      {project.description}
+                    </p>
+                  )}
+
+                  {/* Project Info */}
+                  <div className="space-y-2 text-sm text-muted-foreground">
+                    {project.location && (
+                      <div className="flex items-center gap-2">
+                        <MapPin className="h-4 w-4" />
+                        <span>{project.location}</span>
+                      </div>
+                    )}
+                    {project.start_date && (
+                      <div className="flex items-center gap-2">
+                        <Calendar className="h-4 w-4" />
+                        <span>
+                          Início: {new Date(project.start_date).toLocaleDateString('pt-BR')}
+                        </span>
+                      </div>
+                    )}
+                    {project.end_date && (
+                      <div className="flex items-center gap-2">
+                        <Calendar className="h-4 w-4" />
+                        <span>
+                          Fim: {new Date(project.end_date).toLocaleDateString('pt-BR')}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
 
         {/* View More Section */}
