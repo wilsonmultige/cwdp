@@ -16,7 +16,7 @@ const HeroSection = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 py-20">
+      <div className="relative z-10 container mx-auto px-4 py-12 md:py-16">
         <div className="max-w-4xl">
           {/* Badge */}
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-accent/20 border border-accent/30 text-accent font-medium mb-6 animate-fade-up">

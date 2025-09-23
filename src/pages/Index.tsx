@@ -8,6 +8,7 @@ import PartnersSection from "@/components/PartnersSection";
 import ContactSection from "@/components/ContactSection";
 import GDPRCompliance from "@/components/GDPRCompliance";
 import Footer from "@/components/Footer";
+import FloatingContactButtons from "@/components/FloatingContactButtons";
 
 const Index = () => {
   return (
@@ -24,6 +25,7 @@ const Index = () => {
       </main>
       <Footer />
       <GDPRCompliance />
+      <FloatingContactButtons />
     </div>
   );
 };

@@ -12,13 +12,13 @@ const Footer = () => {
     { name: "Contato", href: "#contato" }
   ];
 
-  const services = [
-    "Construção Civil",
-    "Instalações Elétricas",
-    "Manutenção",
-    "Assistência Técnica",
-    "Reformas",
-    "Projetos Residenciais"
+  const gdprLinks = [
+    "Política de Privacidade",
+    "Política de Cookies",
+    "Termos de Serviço",
+    "Gestão de Consentimentos",
+    "Direitos do Titular",
+    "Contactar DPO"
   ];
 
   const socialLinks = [
@@ -79,16 +79,16 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Services */}
+          {/* GDPR Compliance */}
           <div className="space-y-6">
-            <h3 className="text-xl font-semibold text-accent">Serviços</h3>
+            <h3 className="text-xl font-semibold text-accent">Conformidade RGPD</h3>
             <ul className="space-y-3">
-              {services.map((service, index) => (
+              {gdprLinks.map((link, index) => (
                 <li key={index}>
-                  <span className="text-primary-foreground/80 flex items-center">
-                    <span className="w-2 h-2 rounded-full bg-accent/50 mr-3" />
-                    {service}
-                  </span>
+                  <button className="text-primary-foreground/80 hover:text-accent transition-colors duration-200 flex items-center group text-left">
+                    <span className="w-2 h-2 rounded-full bg-accent/50 mr-3 group-hover:bg-accent transition-colors" />
+                    {link}
+                  </button>
                 </li>
               ))}
             </ul>
