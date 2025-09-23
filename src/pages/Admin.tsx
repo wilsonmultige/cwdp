@@ -8,6 +8,8 @@ import { useToast } from "@/hooks/use-toast";
 import { LogOut, Plus, Settings } from "lucide-react";
 import AdminProjects from "@/components/admin/AdminProjects";
 import AdminPartners from "@/components/admin/AdminPartners";
+import AdminSettings from "@/components/admin/AdminSettings";
+import AdminContactRequests from "@/components/admin/AdminContactRequests";
 import { User, Session } from '@supabase/supabase-js';
 
 interface Profile {
@@ -179,9 +181,11 @@ const Admin = () => {
         </div>
 
         <Tabs defaultValue="projects" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="projects">Projetos</TabsTrigger>
             <TabsTrigger value="partners">Parceiros</TabsTrigger>
+            <TabsTrigger value="settings">Configurações</TabsTrigger>
+            <TabsTrigger value="contacts">Solicitações</TabsTrigger>
           </TabsList>
           
           <TabsContent value="projects" className="mt-8">
@@ -190,6 +194,14 @@ const Admin = () => {
           
           <TabsContent value="partners" className="mt-8">
             <AdminPartners />
+          </TabsContent>
+          
+          <TabsContent value="settings" className="mt-8">
+            <AdminSettings />
+          </TabsContent>
+          
+          <TabsContent value="contacts" className="mt-8">
+            <AdminContactRequests />
           </TabsContent>
         </Tabs>
       </main>

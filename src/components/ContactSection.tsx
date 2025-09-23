@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 
 const ContactSection = () => {
@@ -54,8 +55,19 @@ const ContactSection = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      const { error } = await supabase
+        .from('contact_requests')
+        .insert([{
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || null,
+          service: formData.service || null,
+          message: formData.message
+        }]);
+
+      if (error) throw error;
+
       toast({
         title: "Mensagem Enviada!",
         description: "Entraremos em contato em breve para discutir seu projeto.",
@@ -68,9 +80,16 @@ const ContactSection = () => {
         service: "",
         message: ""
       });
-      
+    } catch (error) {
+      console.error('Error submitting contact request:', error);
+      toast({
+        title: "Erro ao Enviar",
+        description: "Ocorreu um erro ao enviar sua mensagem. Tente novamente.",
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
 
   return (
