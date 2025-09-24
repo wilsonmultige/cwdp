@@ -1,5 +1,6 @@
 import { Phone, Mail, MapPin, Instagram, Facebook, Linkedin } from "lucide-react";
 import logo from "@/assets/logo.png";
+import GDPRModal from "./GDPRModal";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -85,10 +86,19 @@ const Footer = () => {
             <ul className="space-y-3">
               {gdprLinks.map((link, index) => (
                 <li key={index}>
-                  <button className="text-primary-foreground/80 hover:text-accent transition-colors duration-200 flex items-center group text-left">
-                    <span className="w-2 h-2 rounded-full bg-accent/50 mr-3 group-hover:bg-accent transition-colors" />
-                    {link}
-                  </button>
+                  <GDPRModal type={
+                    link === "Política de Privacidade" ? "privacy" :
+                    link === "Política de Cookies" ? "cookies" :
+                    link === "Termos de Serviço" ? "terms" :
+                    link === "Gestão de Consentimentos" ? "consent" :
+                    link === "Direitos do Titular" ? "rights" :
+                    "dpo"
+                  }>
+                    <button className="text-primary-foreground/80 hover:text-accent transition-colors duration-200 flex items-center group text-left">
+                      <span className="w-2 h-2 rounded-full bg-accent/50 mr-3 group-hover:bg-accent transition-colors" />
+                      {link}
+                    </button>
+                  </GDPRModal>
                 </li>
               ))}
             </ul>
@@ -133,14 +143,25 @@ const Footer = () => {
             <p className="text-primary-foreground/80 text-sm">
               © {currentYear} CWDP Construção. Todos os direitos reservados.
             </p>
-            <div className="flex space-x-6 text-sm">
-              <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
-                Política de Privacidade
+          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-6 text-sm">
+            <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
+              Política de Privacidade
+            </a>
+            <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
+              Termos de Serviço
+            </a>
+            <span className="text-primary-foreground/60">
+              Site criado por{" "}
+              <a 
+                href="https://www.casacriativami.com/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-accent hover:text-accent/80 transition-colors font-medium"
+              >
+                Casa Criativa M&I
               </a>
-              <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
-                Termos de Serviço
-              </a>
-            </div>
+            </span>
+          </div>
           </div>
         </div>
       </div>

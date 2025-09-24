@@ -99,9 +99,12 @@ const ServicesSection = () => {
                 <Button 
                   variant="outline" 
                   className="w-full group hover:bg-accent hover:text-accent-foreground hover:border-accent"
+                  asChild
                 >
-                  Saiba Mais
-                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <a href="#contato">
+                    Solicitar Orçamento
+                    <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </a>
                 </Button>
               </CardContent>
             </Card>

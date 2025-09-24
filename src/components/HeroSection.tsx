@@ -4,7 +4,7 @@ import heroImage from "@/assets/hero-construction.jpg";
 
 const HeroSection = () => {
   return (
-    <section id="inicio" className="relative min-h-screen flex items-center bg-gradient-subtle overflow-hidden">
+    <section id="inicio" className="relative h-screen flex items-center bg-gradient-subtle overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0">
         <img
@@ -16,8 +16,8 @@ const HeroSection = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 py-12 md:py-16">
-        <div className="max-w-4xl">
+      <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
+        <div className="max-w-4xl w-full">
           {/* Badge */}
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-accent/20 border border-accent/30 text-accent font-medium mb-6 animate-fade-up">
             <Award className="w-4 h-4 mr-2" />

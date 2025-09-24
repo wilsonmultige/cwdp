@@ -191,6 +191,42 @@ export type Database = {
         }
         Relationships: []
       }
+      stats: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          icon_name: string
+          id: string
+          is_active: boolean | null
+          label: string
+          number: number
+          suffix: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          icon_name: string
+          id?: string
+          is_active?: boolean | null
+          label: string
+          number?: number
+          suffix?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          icon_name?: string
+          id?: string
+          is_active?: boolean | null
+          label?: string
+          number?: number
+          suffix?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

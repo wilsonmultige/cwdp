@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, Plus, Settings } from "lucide-react";
+import { LogOut, Plus, Settings, BarChart3 } from "lucide-react";
 import AdminProjects from "@/components/admin/AdminProjects";
 import AdminPartners from "@/components/admin/AdminPartners";
 import AdminSettings from "@/components/admin/AdminSettings";
 import AdminContactRequests from "@/components/admin/AdminContactRequests";
+import AdminStats from "@/components/admin/AdminStats";
 import { User, Session } from '@supabase/supabase-js';
 
 interface Profile {
@@ -181,9 +182,13 @@ const Admin = () => {
         </div>
 
         <Tabs defaultValue="projects" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="projects">Projetos</TabsTrigger>
             <TabsTrigger value="partners">Parceiros</TabsTrigger>
+            <TabsTrigger value="stats" className="flex items-center gap-2">
+              <BarChart3 className="h-4 w-4" />
+              Estatísticas
+            </TabsTrigger>
             <TabsTrigger value="settings">Configurações</TabsTrigger>
             <TabsTrigger value="contacts">Solicitações</TabsTrigger>
           </TabsList>
@@ -194,6 +199,10 @@ const Admin = () => {
           
           <TabsContent value="partners" className="mt-8">
             <AdminPartners />
+          </TabsContent>
+
+          <TabsContent value="stats" className="mt-8">
+            <AdminStats />
           </TabsContent>
           
           <TabsContent value="settings" className="mt-8">

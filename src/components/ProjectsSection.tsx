@@ -111,7 +111,6 @@ const ProjectsSection = () => {
           </p>
         </div>
 
-        {/* Projects Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {projects?.map((project, index) => {
             const IconComponent = getIcon(project.project_type);
@@ -124,13 +123,13 @@ const ProjectsSection = () => {
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 {/* Project Image */}
-                <div className="relative h-64 overflow-hidden">
+                <div className="relative h-80 overflow-hidden">
                   <img
-                    src={project.image_url || '/api/placeholder/800/400'}
+                    src={project.image_url || '/api/placeholder/800/600'}
                     alt={project.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
-                      e.currentTarget.src = '/api/placeholder/800/400?text=Projeto';
+                      e.currentTarget.src = '/api/placeholder/800/600?text=Projeto+CWDP';
                     }}
                   />
                   <div className="absolute top-4 left-4">
@@ -139,51 +138,19 @@ const ProjectsSection = () => {
                       {project.project_type || 'Projeto'}
                     </Badge>
                   </div>
-                  <div className="absolute top-4 right-4">
-                    <Badge className={`font-medium ${statusInfo.color}`}>
-                      {statusInfo.label}
-                    </Badge>
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                </div>
-
-                <CardContent className="p-6 space-y-4">
-                  <h3 className="text-xl font-bold text-primary group-hover:text-accent transition-colors">
-                    {project.title}
-                  </h3>
-                  
-                  {project.description && (
-                    <p className="text-muted-foreground leading-relaxed">
-                      {project.description}
-                    </p>
-                  )}
-
-                  {/* Project Info */}
-                  <div className="space-y-2 text-sm text-muted-foreground">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <h3 className="text-lg font-bold text-white mb-1">
+                      {project.title}
+                    </h3>
                     {project.location && (
-                      <div className="flex items-center gap-2">
-                        <MapPin className="h-4 w-4" />
-                        <span>{project.location}</span>
-                      </div>
-                    )}
-                    {project.start_date && (
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4" />
-                        <span>
-                          Início: {new Date(project.start_date).toLocaleDateString('pt-BR')}
-                        </span>
-                      </div>
-                    )}
-                    {project.end_date && (
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4" />
-                        <span>
-                          Fim: {new Date(project.end_date).toLocaleDateString('pt-BR')}
-                        </span>
-                      </div>
+                      <p className="text-white/90 text-sm flex items-center gap-1">
+                        <MapPin className="h-3 w-3" />
+                        {project.location}
+                      </p>
                     )}
                   </div>
-                </CardContent>
+                </div>
               </Card>
             );
           })}
