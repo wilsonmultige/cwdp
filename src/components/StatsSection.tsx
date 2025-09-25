@@ -88,7 +88,7 @@ const StatsSection = () => {
     }, [target, isVisible]);
 
     return (
-      <span className="text-4xl md:text-5xl font-bold text-primary-foreground">
+      <span className="stats-counter">
         {count.toLocaleString()}{suffix}
       </span>
     );
