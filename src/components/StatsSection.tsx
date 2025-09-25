@@ -30,7 +30,9 @@ const StatsSection = () => {
         console.error('Error fetching stats:', error);
         throw error;
       }
-      console.log('Stats data:', data);
+  // Debug: Log stats data when component mounts
+  console.log('StatsSection - Settings data:', settings);
+  console.log('StatsSection - Stats data:', stats);
       return data as Stat[];
     },
   });
@@ -123,7 +125,7 @@ const StatsSection = () => {
   return (
     <section 
       id="stats" 
-      className="py-20 bg-primary text-primary-foreground relative overflow-hidden"
+      className="py-20 bg-primary text-white relative overflow-hidden"
     >
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
@@ -134,10 +136,10 @@ const StatsSection = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16 animate-fade-up">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-primary-foreground">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-white">
             {settings?.stats_title || "Números que Falam por Si"}
           </h2>
-          <p className="text-xl text-primary-foreground/80 max-w-2xl mx-auto">
+          <p className="text-xl text-white/80 max-w-2xl mx-auto">
             {settings?.stats_description || "Anos de dedicação e excelência resultam em números impressionantes e clientes satisfeitos."}
           </p>
         </div>
@@ -149,18 +151,18 @@ const StatsSection = () => {
             return (
               <div
                 key={stat.id}
-                className="text-center p-8 rounded-2xl bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10 hover:bg-primary-foreground/10 transition-all duration-300 hover:scale-105 animate-fade-up"
+                className="text-center p-8 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-105 animate-fade-up"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-2xl bg-accent/20 border border-accent/30">
-                  <IconComponent className="w-8 h-8 text-accent" />
+                <div className="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-2xl bg-white/10 border border-white/20">
+                  <IconComponent className="w-8 h-8 text-white" />
                 </div>
                 
                 <div className="mb-2">
                   <Counter target={stat.number} suffix={stat.suffix} />
                 </div>
                 
-                <p className="text-primary-foreground/70 font-medium text-lg">
+                <p className="text-white/70 font-medium text-lg">
                   {stat.label}
                 </p>
               </div>

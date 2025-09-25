@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { LogOut, Plus, Settings, BarChart3 } from "lucide-react";
 import AdminProjects from "@/components/admin/AdminProjects";
+import AdminGallery from "@/components/admin/AdminGallery";
 import AdminPartners from "@/components/admin/AdminPartners";
 import AdminSettings from "@/components/admin/AdminSettings";
 import AdminContactRequests from "@/components/admin/AdminContactRequests";
@@ -182,8 +183,9 @@ const Admin = () => {
         </div>
 
         <Tabs defaultValue="projects" className="w-full">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="projects">Projetos</TabsTrigger>
+            <TabsTrigger value="gallery">Galeria</TabsTrigger>
             <TabsTrigger value="partners">Parceiros</TabsTrigger>
             <TabsTrigger value="stats" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
@@ -195,6 +197,10 @@ const Admin = () => {
           
           <TabsContent value="projects" className="mt-8">
             <AdminProjects />
+          </TabsContent>
+
+          <TabsContent value="gallery" className="mt-8">
+            <AdminGallery />
           </TabsContent>
           
           <TabsContent value="partners" className="mt-8">

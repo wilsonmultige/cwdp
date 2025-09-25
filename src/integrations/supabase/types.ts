@@ -50,6 +50,48 @@ export type Database = {
         }
         Relationships: []
       }
+      gallery: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string | null
+          display_order: number | null
+          id: string
+          image_url: string
+          is_active: boolean | null
+          is_footer_logo: boolean | null
+          is_logo: boolean | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url: string
+          is_active?: boolean | null
+          is_footer_logo?: boolean | null
+          is_logo?: boolean | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string
+          is_active?: boolean | null
+          is_footer_logo?: boolean | null
+          is_logo?: boolean | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       partners: {
         Row: {
           created_at: string
@@ -119,6 +161,7 @@ export type Database = {
           description: string | null
           display_order: number | null
           end_date: string | null
+          gallery_images: Json | null
           gallery_urls: string[] | null
           id: string
           image_url: string | null
@@ -135,6 +178,7 @@ export type Database = {
           description?: string | null
           display_order?: number | null
           end_date?: string | null
+          gallery_images?: Json | null
           gallery_urls?: string[] | null
           id?: string
           image_url?: string | null
@@ -151,6 +195,7 @@ export type Database = {
           description?: string | null
           display_order?: number | null
           end_date?: string | null
+          gallery_images?: Json | null
           gallery_urls?: string[] | null
           id?: string
           image_url?: string | null

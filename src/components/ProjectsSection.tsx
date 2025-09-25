@@ -132,10 +132,15 @@ const ProjectsSection = () => {
                       e.currentTarget.src = '/api/placeholder/800/600?text=Projeto+CWDP';
                     }}
                   />
-                  <div className="absolute top-4 left-4">
-                    <Badge className="bg-accent/90 text-accent-foreground font-medium">
-                      <IconComponent className="w-3 h-3 mr-1" />
-                      {project.project_type || 'Projeto'}
+                  <div className="absolute top-4 left-4 flex gap-2">
+                    {project.project_type && (
+                      <Badge className="bg-accent/90 text-accent-foreground font-medium">
+                        <IconComponent className="w-3 h-3 mr-1" />
+                        {project.project_type}
+                      </Badge>
+                    )}
+                    <Badge className={`font-medium ${statusInfo.color}`}>
+                      {statusInfo.label}
                     </Badge>
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
@@ -147,6 +152,11 @@ const ProjectsSection = () => {
                       <p className="text-white/90 text-sm flex items-center gap-1">
                         <MapPin className="h-3 w-3" />
                         {project.location}
+                      </p>
+                    )}
+                    {project.description && (
+                      <p className="text-white/80 text-xs mt-2 line-clamp-2">
+                        {project.description}
                       </p>
                     )}
                   </div>

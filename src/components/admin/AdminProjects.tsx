@@ -10,7 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Edit, Trash2, Calendar } from "lucide-react";
+import { Plus, Edit, Trash2, Calendar, Image, Eye } from "lucide-react";
+import GalleryModal from "@/components/GalleryModal";
 
 interface Project {
   id: string;
@@ -29,6 +30,8 @@ interface Project {
 const AdminProjects = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [galleryImages, setGalleryImages] = useState<any[]>([]);
   const [formData, setFormData] = useState<{
     title: string;
     description: string;
@@ -55,6 +58,21 @@ const AdminProjects = () => {
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  // Fetch gallery images
+  const { data: gallery } = useQuery({
+    queryKey: ['gallery'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('gallery')
+        .select('*')
+        .eq('is_active', true)
+        .order('display_order');
+      
+      if (error) throw error;
+      return data;
+    },
+  });
 
   const { data: projects, isLoading } = useQuery({
     queryKey: ['admin-projects'],
@@ -137,6 +155,18 @@ const AdminProjects = () => {
       });
     },
   });
+
+  const openGallery = () => {
+    if (gallery) {
+      setGalleryImages(gallery);
+      setIsGalleryOpen(true);
+    }
+  };
+
+  const handleImageSelect = (image: any) => {
+    setFormData({ ...formData, image_url: image.image_url });
+    setIsGalleryOpen(false);
+  };
 
   const resetForm = () => {
     setFormData({
@@ -250,13 +280,36 @@ const AdminProjects = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="image_url">URL da Imagem</Label>
-                  <Input
-                    id="image_url"
-                    type="url"
-                    value={formData.image_url}
-                    onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                    placeholder="https://exemplo.com/imagem.jpg"
-                  />
+                  <div className="flex gap-2">
+                    <Input
+                      id="image_url"
+                      type="url"
+                      value={formData.image_url}
+                      onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+                      placeholder="https://exemplo.com/imagem.jpg"
+                    />
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      onClick={openGallery}
+                      className="flex items-center gap-2"
+                    >
+                      <Image className="w-4 h-4" />
+                      Galeria
+                    </Button>
+                  </div>
+                  {formData.image_url && (
+                    <div className="mt-2">
+                      <img 
+                        src={formData.image_url} 
+                        alt="Preview" 
+                        className="w-full h-32 object-cover rounded-lg border"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
                 
                 <div className="space-y-2">
@@ -351,6 +404,16 @@ const AdminProjects = () => {
         </Dialog>
       </div>
 
+      {/* Gallery Modal */}
+      <GalleryModal
+        images={galleryImages}
+        currentIndex={0}
+        isOpen={isGalleryOpen}
+        onClose={() => setIsGalleryOpen(false)}
+        onSelect={handleImageSelect}
+        selectMode={true}
+      />
+
       <div className="grid gap-4">
         {projects?.map((project) => (
           <Card key={project.id}>
@@ -385,6 +448,20 @@ const AdminProjects = () => {
                     )}
                   </div>
                 </div>
+
+                {/* Project Image Preview */}
+                {project.image_url && (
+                  <div className="w-24 h-16 rounded-lg overflow-hidden mr-4">
+                    <img
+                      src={project.image_url}
+                      alt={project.title}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                  </div>
+                )}
 
                 <div className="flex gap-2">
                   <Button

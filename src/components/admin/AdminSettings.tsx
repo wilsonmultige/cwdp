@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Save, Settings, Phone, Mail, MapPin, Clock } from "lucide-react";
+import { Loader2, Save, Settings, Phone, Mail, MapPin, Clock, Image, Crown, Footprints } from "lucide-react";
+import GalleryModal from "@/components/GalleryModal";
 
 interface Setting {
   id: string;
@@ -18,13 +20,35 @@ const AdminSettings = () => {
   const [settings, setSettings] = useState<Setting[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [currentLogoType, setCurrentLogoType] = useState<'site' | 'footer'>('site');
   const { toast } = useToast();
+
+  // Fetch gallery images
+  const { data: gallery } = useQuery({
+    queryKey: ['gallery'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('gallery')
+        .select('*')
+        .eq('is_active', true)
+        .order('display_order');
+      
+      if (error) throw error;
+      return data;
+    },
+  });
 
   const settingsGroups = [
     {
       title: "Informações da Empresa",
       icon: Settings,
-      keys: ["company_name", "company_subtitle", "company_logo"]
+      keys: ["company_name", "company_subtitle"]
+    },
+    {
+      title: "Logos",
+      icon: Image,
+      keys: ["site_logo_url", "footer_logo_url"]
     },
     {
       title: "Contatos",
@@ -42,6 +66,17 @@ const AdminSettings = () => {
       keys: ["business_hours_weekdays", "business_hours_saturday"]
     }
   ];
+
+  const openGallery = (logoType: 'site' | 'footer') => {
+    setCurrentLogoType(logoType);
+    setIsGalleryOpen(true);
+  };
+
+  const handleImageSelect = (image: any) => {
+    const settingKey = currentLogoType === 'site' ? 'site_logo_url' : 'footer_logo_url';
+    handleSettingChange(settingKey, image.image_url);
+    setIsGalleryOpen(false);
+  };
 
   useEffect(() => {
     fetchSettings();
@@ -154,24 +189,104 @@ const AdminSettings = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {groupSettings.map((setting) => (
-                  <div key={setting.key} className="space-y-2">
-                    <Label htmlFor={setting.key}>
-                      {setting.description || setting.key}
-                    </Label>
-                    <Input
-                      id={setting.key}
-                      value={getSettingValue(setting.key)}
-                      onChange={(e) => handleSettingChange(setting.key, e.target.value)}
-                      placeholder="Digite o valor..."
-                    />
-                  </div>
-                ))}
+                {group.title === "Logos" ? (
+                  // Special handling for logo settings
+                  <>
+                    <div className="space-y-2">
+                      <Label>Logo Principal do Site</Label>
+                      <div className="flex gap-2">
+                        <Input
+                          value={getSettingValue('site_logo_url')}
+                          onChange={(e) => handleSettingChange('site_logo_url', e.target.value)}
+                          placeholder="URL da logo principal..."
+                        />
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          onClick={() => openGallery('site')}
+                          className="flex items-center gap-2"
+                        >
+                          <Crown className="w-4 h-4" />
+                          Galeria
+                        </Button>
+                      </div>
+                      {getSettingValue('site_logo_url') && (
+                        <div className="mt-2">
+                          <img 
+                            src={getSettingValue('site_logo_url')} 
+                            alt="Logo Principal" 
+                            className="h-16 object-contain border rounded-lg p-2 bg-white"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label>Logo do Rodapé</Label>
+                      <div className="flex gap-2">
+                        <Input
+                          value={getSettingValue('footer_logo_url')}
+                          onChange={(e) => handleSettingChange('footer_logo_url', e.target.value)}
+                          placeholder="URL da logo do rodapé..."
+                        />
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          onClick={() => openGallery('footer')}
+                          className="flex items-center gap-2"
+                        >
+                          <Footprints className="w-4 h-4" />
+                          Galeria
+                        </Button>
+                      </div>
+                      {getSettingValue('footer_logo_url') && (
+                        <div className="mt-2 bg-gray-900 p-2 rounded-lg">
+                          <img 
+                            src={getSettingValue('footer_logo_url')} 
+                            alt="Logo Rodapé" 
+                            className="h-16 object-contain"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  // Default handling for other settings
+                  groupSettings.map((setting) => (
+                    <div key={setting.key} className="space-y-2">
+                      <Label htmlFor={setting.key}>
+                        {setting.description || setting.key}
+                      </Label>
+                      <Input
+                        id={setting.key}
+                        value={getSettingValue(setting.key)}
+                        onChange={(e) => handleSettingChange(setting.key, e.target.value)}
+                        placeholder="Digite o valor..."
+                      />
+                    </div>
+                  ))
+                )}
               </CardContent>
             </Card>
           );
         })}
       </div>
+
+      {/* Gallery Modal */}
+      <GalleryModal
+        images={gallery || []}
+        currentIndex={0}
+        isOpen={isGalleryOpen}
+        onClose={() => setIsGalleryOpen(false)}
+        onSelect={handleImageSelect}
+        selectMode={true}
+      />
     </div>
   );
 };
