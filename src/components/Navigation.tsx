@@ -64,9 +64,9 @@ const Navigation = () => {
       </div>
 
       {/* Main Navigation */}
-      <nav className={`bg-background/95 backdrop-blur-md border-b border-border sticky top-0 z-50 shadow-soft transition-all duration-500 ${isScrolled ? 'h-[60px]' : 'h-[80px]'}`}>
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between">
+      <nav className={`bg-background/95 backdrop-blur-md border-b border-border sticky top-0 z-50 shadow-soft transition-all duration-300 ${isScrolled ? 'h-[60px]' : 'h-[80px]'}`}>
+        <div className="container mx-auto px-4 h-full">
+          <div className="flex items-center justify-between h-full">
             {/* Logo */}
             <div className="flex items-center space-x-2 sm:space-x-3">
               <img 

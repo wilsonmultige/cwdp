@@ -112,9 +112,9 @@ const ContactSection = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
+        <div className="grid lg:grid-cols-2 gap-16 items-start max-w-7xl mx-auto">
           {/* Contact Form */}
-          <Card className="bg-primary-foreground/10 backdrop-blur-sm border-primary-foreground/20 animate-fade-up">
+          <Card className="bg-primary-foreground/10 backdrop-blur-sm border-primary-foreground/20 animate-fade-up shadow-lg">
             <CardHeader>
               <CardTitle className="text-2xl text-primary-foreground flex items-center">
                 <Send className="w-6 h-6 mr-3 text-accent" />
@@ -203,7 +203,7 @@ const ContactSection = () => {
           </Card>
 
           {/* Contact Info */}
-          <div className="space-y-6 animate-slide-left">
+          <div className="space-y-8 animate-slide-left">
             {contactInfo.map((info, index) => (
               <Card 
                 key={index} 

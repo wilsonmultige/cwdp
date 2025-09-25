@@ -26,7 +26,11 @@ const StatsSection = () => {
         .eq('is_active', true)
         .order('display_order');
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching stats:', error);
+        throw error;
+      }
+      console.log('Stats data:', data);
       return data as Stat[];
     },
   });
@@ -119,7 +123,7 @@ const StatsSection = () => {
   return (
     <section 
       id="stats" 
-      className="py-20 bg-gradient-primary text-primary-foreground relative overflow-hidden"
+      className="py-20 bg-primary text-primary-foreground relative overflow-hidden"
     >
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
