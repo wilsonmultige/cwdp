@@ -12,6 +12,7 @@ import AdminPartners from "@/components/admin/AdminPartners";
 import AdminSettings from "@/components/admin/AdminSettings";
 import AdminContactRequests from "@/components/admin/AdminContactRequests";
 import AdminStats from "@/components/admin/AdminStats";
+import AdminLogos from "@/components/admin/AdminLogos";
 import { User, Session } from '@supabase/supabase-js';
 
 interface Profile {
@@ -182,18 +183,23 @@ const Admin = () => {
           </p>
         </div>
 
-        <Tabs defaultValue="projects" className="w-full">
-          <TabsList className="grid w-full grid-cols-6">
-            <TabsTrigger value="projects">Projetos</TabsTrigger>
-            <TabsTrigger value="gallery">Galeria</TabsTrigger>
-            <TabsTrigger value="partners">Parceiros</TabsTrigger>
+        <Tabs defaultValue="stats" className="w-full">
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="stats" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
-              Estatísticas
+              Números
             </TabsTrigger>
+            <TabsTrigger value="projects">Projetos</TabsTrigger>
+            <TabsTrigger value="gallery">Galeria</TabsTrigger>
+            <TabsTrigger value="logos">Logos</TabsTrigger>
+            <TabsTrigger value="partners">Parceiros</TabsTrigger>
             <TabsTrigger value="settings">Configurações</TabsTrigger>
             <TabsTrigger value="contacts">Solicitações</TabsTrigger>
           </TabsList>
+          
+          <TabsContent value="stats" className="mt-8">
+            <AdminStats />
+          </TabsContent>
           
           <TabsContent value="projects" className="mt-8">
             <AdminProjects />
@@ -202,13 +208,13 @@ const Admin = () => {
           <TabsContent value="gallery" className="mt-8">
             <AdminGallery />
           </TabsContent>
+
+          <TabsContent value="logos" className="mt-8">
+            <AdminLogos />
+          </TabsContent>
           
           <TabsContent value="partners" className="mt-8">
             <AdminPartners />
-          </TabsContent>
-
-          <TabsContent value="stats" className="mt-8">
-            <AdminStats />
           </TabsContent>
           
           <TabsContent value="settings" className="mt-8">

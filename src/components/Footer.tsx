@@ -1,9 +1,30 @@
 import { Phone, Mail, MapPin, Instagram, Facebook, Linkedin } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/logo.png";
 import GDPRModal from "./GDPRModal";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+
+  // Fetch footer logo from settings
+  const { data: footerLogoUrl } = useQuery({
+    queryKey: ['settings', 'footer_logo_url'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('settings')
+        .select('value')
+        .eq('key', 'footer_logo_url')
+        .maybeSingle();
+      
+      if (error) {
+        console.error('Error fetching footer logo:', error);
+        return null;
+      }
+      
+      return data?.value || null;
+    },
+  });
 
   const quickLinks = [
     { name: "Início", href: "#inicio" },
@@ -36,7 +57,11 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-6">
             <div className="flex items-center space-x-3">
-              <img src={logo} alt="CWDP Logo" className="h-12 w-12" />
+              <img 
+                src={footerLogoUrl || logo} 
+                alt="CWDP Logo" 
+                className="h-12 w-12" 
+              />
               <div className="flex flex-col">
                 <span className="text-2xl font-bold">CWDP</span>
                 <span className="text-sm text-primary-foreground/80">Construção Civil</span>

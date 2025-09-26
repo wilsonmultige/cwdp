@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Phone, Mail, MapPin } from "lucide-react";
@@ -7,6 +9,25 @@ import logo from "@/assets/logo.png";
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  // Fetch site logo from settings
+  const { data: logoUrl } = useQuery({
+    queryKey: ['settings', 'site_logo_url'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('settings')
+        .select('value')
+        .eq('key', 'site_logo_url')
+        .maybeSingle();
+      
+      if (error) {
+        console.error('Error fetching logo:', error);
+        return null;
+      }
+      
+      return data?.value || null;
+    },
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -70,7 +91,7 @@ const Navigation = () => {
             {/* Logo */}
             <div className="flex items-center space-x-2 sm:space-x-3">
               <img 
-                src={logo} 
+                src={logoUrl || logo} 
                 alt="CWDP Logo" 
                 className={`transition-all duration-300 ${isScrolled ? 'h-8 w-8 sm:h-10 sm:w-10' : 'h-10 w-10 sm:h-12 sm:w-12'}`}
               />

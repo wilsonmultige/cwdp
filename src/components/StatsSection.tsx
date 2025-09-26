@@ -30,9 +30,8 @@ const StatsSection = () => {
         console.error('Error fetching stats:', error);
         throw error;
       }
-  // Debug: Log stats data when component mounts
-  console.log('StatsSection - Settings data:', settings);
-  console.log('StatsSection - Stats data:', stats);
+      
+      console.log('StatsSection - Stats data:', data);
       return data as Stat[];
     },
   });
@@ -53,6 +52,7 @@ const StatsSection = () => {
         return acc;
       }, {});
       
+      console.log('StatsSection - Settings data:', settingsMap);
       return settingsMap;
     },
   });
