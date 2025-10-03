@@ -42,7 +42,7 @@ const AdminStats = () => {
   const queryClient = useQueryClient();
 
   const { data: stats, isLoading: statsLoading } = useQuery({
-    queryKey: ['admin-stats'],
+    queryKey: ['stats'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('stats')
@@ -94,6 +94,7 @@ const AdminStats = () => {
     onSuccess: () => {
       toast.success("Configurações atualizadas com sucesso!");
       queryClient.invalidateQueries({ queryKey: ['admin-settings', 'stats'] });
+      queryClient.invalidateQueries({ queryKey: ['settings', 'stats'] });
     },
     onError: () => {
       toast.error("Erro ao atualizar configurações");
@@ -110,7 +111,7 @@ const AdminStats = () => {
     },
     onSuccess: () => {
       toast.success("Estatística adicionada com sucesso!");
-      queryClient.invalidateQueries({ queryKey: ['admin-stats'] });
+      queryClient.invalidateQueries({ queryKey: ['stats'] });
       setNewStat({
         icon_name: 'Building2',
         number: 0,
@@ -136,7 +137,7 @@ const AdminStats = () => {
     },
     onSuccess: () => {
       toast.success("Estatística atualizada!");
-      queryClient.invalidateQueries({ queryKey: ['admin-stats'] });
+      queryClient.invalidateQueries({ queryKey: ['stats'] });
     },
     onError: () => {
       toast.error("Erro ao atualizar estatística");
@@ -154,7 +155,7 @@ const AdminStats = () => {
     },
     onSuccess: () => {
       toast.success("Estatística removida!");
-      queryClient.invalidateQueries({ queryKey: ['admin-stats'] });
+      queryClient.invalidateQueries({ queryKey: ['stats'] });
     },
     onError: () => {
       toast.error("Erro ao remover estatística");

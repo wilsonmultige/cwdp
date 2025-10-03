@@ -93,7 +93,7 @@ const ContactSection = () => {
   };
 
   return (
-    <section id="contato" className="py-20 bg-gradient-primary text-primary-foreground relative overflow-hidden">
+    <section id="contato" className="py-16 bg-gradient-primary text-primary-foreground relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-20 left-10 w-40 h-40 border border-primary-foreground/20 rounded-full" />
@@ -102,7 +102,7 @@ const ContactSection = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Header */}
-        <div className="text-center mb-16 animate-fade-up">
+        <div className="text-center mb-12 animate-fade-up">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-primary-foreground">
             Vamos Construir Juntos
           </h2>
@@ -112,7 +112,7 @@ const ContactSection = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-start max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-8 items-start max-w-7xl mx-auto">
           {/* Contact Form */}
           <Card className="bg-primary-foreground/10 backdrop-blur-sm border-primary-foreground/20 animate-fade-up shadow-lg">
             <CardHeader>
@@ -203,7 +203,7 @@ const ContactSection = () => {
           </Card>
 
           {/* Contact Info */}
-          <div className="space-y-8 animate-slide-left">
+          <div className="space-y-6 animate-slide-left">
             {contactInfo.map((info, index) => (
               <Card 
                 key={index} 
