@@ -203,7 +203,7 @@ const ContactSection = () => {
           </Card>
 
           {/* Contact Info */}
-          <div className="space-y-6 animate-slide-left">
+          <div className="space-y-3 animate-slide-left">
             {contactInfo.map((info, index) => (
               <Card 
                 key={index} 

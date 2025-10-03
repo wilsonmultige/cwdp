@@ -5,13 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, Plus, Settings, BarChart3 } from "lucide-react";
+import { LogOut, Plus, Settings } from "lucide-react";
 import AdminProjects from "@/components/admin/AdminProjects";
 import AdminGallery from "@/components/admin/AdminGallery";
 import AdminPartners from "@/components/admin/AdminPartners";
 import AdminSettings from "@/components/admin/AdminSettings";
 import AdminContactRequests from "@/components/admin/AdminContactRequests";
-import AdminStats from "@/components/admin/AdminStats";
 import AdminLogos from "@/components/admin/AdminLogos";
 import { User, Session } from '@supabase/supabase-js';
 
@@ -183,12 +182,8 @@ const Admin = () => {
           </p>
         </div>
 
-        <Tabs defaultValue="stats" className="w-full">
-          <TabsList className="grid w-full grid-cols-7">
-            <TabsTrigger value="stats" className="flex items-center gap-2">
-              <BarChart3 className="h-4 w-4" />
-              Números
-            </TabsTrigger>
+        <Tabs defaultValue="projects" className="w-full">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="projects">Projetos</TabsTrigger>
             <TabsTrigger value="gallery">Galeria</TabsTrigger>
             <TabsTrigger value="logos">Logos</TabsTrigger>
@@ -196,10 +191,6 @@ const Admin = () => {
             <TabsTrigger value="settings">Configurações</TabsTrigger>
             <TabsTrigger value="contacts">Solicitações</TabsTrigger>
           </TabsList>
-          
-          <TabsContent value="stats" className="mt-8">
-            <AdminStats />
-          </TabsContent>
           
           <TabsContent value="projects" className="mt-8">
             <AdminProjects />

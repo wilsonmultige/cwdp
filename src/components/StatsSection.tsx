@@ -1,61 +1,40 @@
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Building2, Wrench, Users, Award, Star, Zap } from "lucide-react";
-
-interface Stat {
-  id: string;
-  icon_name: string;
-  number: number;
-  label: string;
-  suffix: string;
-  display_order: number;
-  is_active: boolean;
-}
+import { Building2, Wrench, Users, Award } from "lucide-react";
 
 const StatsSection = () => {
   const [isVisible, setIsVisible] = useState(false);
 
-  // Fetch stats from database
-  const { data: stats } = useQuery({
-    queryKey: ['stats'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('stats')
-        .select('*')
-        .eq('is_active', true)
-        .order('display_order');
-      
-      if (error) {
-        console.error('Error fetching stats:', error);
-        throw error;
-      }
-      
-      console.log('StatsSection - Stats data:', data);
-      return data as Stat[];
+  // Hardcoded stats - edite aqui os valores
+  const stats = [
+    {
+      id: "1",
+      icon_name: "Building2",
+      number: 150,
+      label: "Projetos Realizados",
+      suffix: "+",
     },
-  });
-
-  // Fetch section content from settings
-  const { data: settings } = useQuery({
-    queryKey: ['settings', 'stats'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('settings')
-        .select('*')
-        .in('key', ['stats_title', 'stats_description']);
-      
-      if (error) throw error;
-      
-      const settingsMap = data.reduce((acc: Record<string, string>, setting) => {
-        acc[setting.key] = setting.value || '';
-        return acc;
-      }, {});
-      
-      console.log('StatsSection - Settings data:', settingsMap);
-      return settingsMap;
+    {
+      id: "2",
+      icon_name: "Award",
+      number: 100001,
+      label: "Metros de Cabos",
+      suffix: "+",
     },
-  });
+    {
+      id: "3",
+      icon_name: "Users",
+      number: 50,
+      label: "Especialistas",
+      suffix: "+",
+    },
+    {
+      id: "4",
+      icon_name: "Wrench",
+      number: 200,
+      label: "Projetos Entregues",
+      suffix: "+",
+    },
+  ];
 
   const getIcon = (iconName: string) => {
     const icons = {
@@ -63,8 +42,6 @@ const StatsSection = () => {
       Wrench,
       Users,
       Award,
-      Star,
-      Zap,
     };
     return icons[iconName as keyof typeof icons] || Building2;
   };
@@ -75,7 +52,7 @@ const StatsSection = () => {
     useEffect(() => {
       if (!isVisible) return;
 
-      const duration = 2000; // 2 seconds
+      const duration = 2000;
       const steps = 60;
       const increment = target / steps;
       let current = 0;
@@ -94,7 +71,7 @@ const StatsSection = () => {
     }, [target, isVisible]);
 
     return (
-      <span className="stats-counter">
+      <span className="text-white text-4xl md:text-5xl font-bold">
         {count.toLocaleString()}{suffix}
       </span>
     );
@@ -118,10 +95,6 @@ const StatsSection = () => {
     return () => observer.disconnect();
   }, []);
 
-  if (!stats?.length) {
-    return null;
-  }
-
   return (
     <section 
       id="stats" 
@@ -137,10 +110,10 @@ const StatsSection = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16 animate-fade-up">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-white">
-            {settings?.stats_title || "Números que Falam por Si"}
+            Números que Falam por Si
           </h2>
           <p className="text-xl text-white/80 max-w-2xl mx-auto">
-            {settings?.stats_description || "Anos de dedicação e excelência resultam em números impressionantes e clientes satisfeitos."}
+            Anos de dedicação e excelência resultam em números impressionantes e clientes satisfeitos em toda a Europa.
           </p>
         </div>
 
