@@ -93,7 +93,7 @@ const ContactSection = () => {
   };
 
   return (
-    <section id="contato" className="py-16 bg-gradient-primary text-primary-foreground relative overflow-hidden">
+    <section id="contato" className="py-12 bg-gradient-primary text-primary-foreground relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-20 left-10 w-40 h-40 border border-primary-foreground/20 rounded-full" />
@@ -102,7 +102,7 @@ const ContactSection = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Header */}
-        <div className="text-center mb-12 animate-fade-up">
+        <div className="text-center mb-8 animate-fade-up">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-primary-foreground">
             Vamos Construir Juntos
           </h2>
@@ -112,7 +112,7 @@ const ContactSection = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 items-start max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-6 items-start max-w-7xl mx-auto">
           {/* Contact Form */}
           <Card className="bg-primary-foreground/10 backdrop-blur-sm border-primary-foreground/20 animate-fade-up shadow-lg">
             <CardHeader>
@@ -122,7 +122,7 @@ const ContactSection = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name" className="text-primary-foreground">Nome Completo</Label>
@@ -203,13 +203,13 @@ const ContactSection = () => {
           </Card>
 
           {/* Contact Info */}
-          <div className="space-y-3 animate-slide-left">
+          <div className="space-y-2 animate-slide-left">
             {contactInfo.map((info, index) => (
               <Card 
                 key={index} 
                 className="bg-primary-foreground/10 backdrop-blur-sm border-primary-foreground/20 hover:bg-primary-foreground/15 transition-all duration-300 group"
               >
-                <CardContent className="p-6">
+                <CardContent className="p-4">
                   <div className="flex items-start space-x-4">
                     <div className="p-3 rounded-xl bg-accent/20 group-hover:bg-accent/30 transition-colors">
                       <info.icon className="w-6 h-6 text-accent" />
@@ -218,7 +218,7 @@ const ContactSection = () => {
                       <h3 className="text-xl font-semibold text-primary-foreground mb-2">
                         {info.title}
                       </h3>
-                      <div className="space-y-1 mb-4">
+                      <div className="space-y-1 mb-2">
                         {info.details.map((detail, idx) => (
                           <p key={idx} className="text-primary-foreground/80">
                             {detail}
