@@ -203,10 +203,17 @@ const AdminProjects = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Prepare data with null for empty date fields
+    const submitData = {
+      ...formData,
+      start_date: formData.start_date || null,
+      end_date: formData.end_date || null,
+    };
+    
     if (editingProject) {
-      updateMutation.mutate({ id: editingProject.id, data: formData });
+      updateMutation.mutate({ id: editingProject.id, data: submitData });
     } else {
-      createMutation.mutate(formData);
+      createMutation.mutate(submitData);
     }
   };
 
