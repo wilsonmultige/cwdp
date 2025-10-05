@@ -14,6 +14,10 @@ interface ContactRequest {
   email: string;
   phone: string | null;
   service: string | null;
+  budget_range: string | null;
+  desired_timeline: string | null;
+  project_location: string | null;
+  how_found_us: string | null;
   message: string;
   status: string;
   created_at: string;
@@ -166,12 +170,42 @@ const AdminContactRequests = () => {
               {expandedCard === request.id && (
                 <CardContent className="border-t pt-4">
                   <div className="space-y-4">
-                    {request.service && (
-                      <div>
-                        <Label className="text-sm font-medium">Serviço de Interesse:</Label>
-                        <p className="text-sm text-muted-foreground mt-1">{request.service}</p>
-                      </div>
-                    )}
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {request.service && (
+                        <div>
+                          <Label className="text-sm font-medium">Serviço de Interesse:</Label>
+                          <p className="text-sm text-muted-foreground mt-1">{request.service}</p>
+                        </div>
+                      )}
+                      
+                      {request.budget_range && (
+                        <div>
+                          <Label className="text-sm font-medium">Orçamento Estimado:</Label>
+                          <p className="text-sm text-muted-foreground mt-1">{request.budget_range}</p>
+                        </div>
+                      )}
+                      
+                      {request.desired_timeline && (
+                        <div>
+                          <Label className="text-sm font-medium">Prazo Desejado:</Label>
+                          <p className="text-sm text-muted-foreground mt-1">{request.desired_timeline}</p>
+                        </div>
+                      )}
+                      
+                      {request.project_location && (
+                        <div>
+                          <Label className="text-sm font-medium">Localização do Projeto:</Label>
+                          <p className="text-sm text-muted-foreground mt-1">{request.project_location}</p>
+                        </div>
+                      )}
+                      
+                      {request.how_found_us && (
+                        <div>
+                          <Label className="text-sm font-medium">Como Nos Conheceu:</Label>
+                          <p className="text-sm text-muted-foreground mt-1">{request.how_found_us}</p>
+                        </div>
+                      )}
+                    </div>
                     
                     <div>
                       <Label className="text-sm font-medium">Mensagem:</Label>

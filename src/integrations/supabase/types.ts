@@ -16,34 +16,46 @@ export type Database = {
     Tables: {
       contact_requests: {
         Row: {
+          budget_range: string | null
           created_at: string
+          desired_timeline: string | null
           email: string
+          how_found_us: string | null
           id: string
           message: string
           name: string
           phone: string | null
+          project_location: string | null
           service: string | null
           status: string | null
           updated_at: string
         }
         Insert: {
+          budget_range?: string | null
           created_at?: string
+          desired_timeline?: string | null
           email: string
+          how_found_us?: string | null
           id?: string
           message: string
           name: string
           phone?: string | null
+          project_location?: string | null
           service?: string | null
           status?: string | null
           updated_at?: string
         }
         Update: {
+          budget_range?: string | null
           created_at?: string
+          desired_timeline?: string | null
           email?: string
+          how_found_us?: string | null
           id?: string
           message?: string
           name?: string
           phone?: string | null
+          project_location?: string | null
           service?: string | null
           status?: string | null
           updated_at?: string

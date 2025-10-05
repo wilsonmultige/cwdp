@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
@@ -15,6 +16,10 @@ const ContactSection = () => {
     email: "",
     phone: "",
     service: "",
+    budget_range: "",
+    desired_timeline: "",
+    project_location: "",
+    how_found_us: "",
     message: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -51,6 +56,10 @@ const ContactSection = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -63,6 +72,10 @@ const ContactSection = () => {
           email: formData.email,
           phone: formData.phone || null,
           service: formData.service || null,
+          budget_range: formData.budget_range || null,
+          desired_timeline: formData.desired_timeline || null,
+          project_location: formData.project_location || null,
+          how_found_us: formData.how_found_us || null,
           message: formData.message
         }]);
 
@@ -78,6 +91,10 @@ const ContactSection = () => {
         email: "",
         phone: "",
         service: "",
+        budget_range: "",
+        desired_timeline: "",
+        project_location: "",
+        how_found_us: "",
         message: ""
       });
     } catch (error) {
@@ -166,14 +183,80 @@ const ContactSection = () => {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="service" className="text-primary-foreground">Serviço de Interesse</Label>
+                    <Select value={formData.service} onValueChange={(value) => handleSelectChange('service', value)}>
+                      <SelectTrigger className="bg-primary-foreground/10 border-primary-foreground/30 text-primary-foreground">
+                        <SelectValue placeholder="Selecione um serviço" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="construcao-civil">Construção Civil</SelectItem>
+                        <SelectItem value="remodelacao">Remodelação</SelectItem>
+                        <SelectItem value="pintura">Pintura e Acabamentos</SelectItem>
+                        <SelectItem value="capoto">Sistema Capoto</SelectItem>
+                        <SelectItem value="telhados">Telhados</SelectItem>
+                        <SelectItem value="outro">Outro</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="budget_range" className="text-primary-foreground">Orçamento Estimado</Label>
+                    <Select value={formData.budget_range} onValueChange={(value) => handleSelectChange('budget_range', value)}>
+                      <SelectTrigger className="bg-primary-foreground/10 border-primary-foreground/30 text-primary-foreground">
+                        <SelectValue placeholder="Selecione uma faixa" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="menos-10k">Menos de €10.000</SelectItem>
+                        <SelectItem value="10k-25k">€10.000 - €25.000</SelectItem>
+                        <SelectItem value="25k-50k">€25.000 - €50.000</SelectItem>
+                        <SelectItem value="50k-100k">€50.000 - €100.000</SelectItem>
+                        <SelectItem value="mais-100k">Mais de €100.000</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="desired_timeline" className="text-primary-foreground">Prazo Desejado</Label>
+                    <Select value={formData.desired_timeline} onValueChange={(value) => handleSelectChange('desired_timeline', value)}>
+                      <SelectTrigger className="bg-primary-foreground/10 border-primary-foreground/30 text-primary-foreground">
+                        <SelectValue placeholder="Selecione um prazo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="urgente">Urgente (1-2 meses)</SelectItem>
+                        <SelectItem value="curto">Curto Prazo (3-6 meses)</SelectItem>
+                        <SelectItem value="medio">Médio Prazo (6-12 meses)</SelectItem>
+                        <SelectItem value="flexivel">Flexível</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="project_location" className="text-primary-foreground">Localização do Projeto</Label>
                     <Input
-                      id="service"
-                      name="service"
-                      value={formData.service}
+                      id="project_location"
+                      name="project_location"
+                      value={formData.project_location}
                       onChange={handleInputChange}
                       className="bg-primary-foreground/10 border-primary-foreground/30 text-primary-foreground placeholder:text-primary-foreground/60"
-                      placeholder="Ex: Construção Civil"
+                      placeholder="Cidade ou região"
                     />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="how_found_us" className="text-primary-foreground">Como Nos Conheceu?</Label>
+                    <Select value={formData.how_found_us} onValueChange={(value) => handleSelectChange('how_found_us', value)}>
+                      <SelectTrigger className="bg-primary-foreground/10 border-primary-foreground/30 text-primary-foreground">
+                        <SelectValue placeholder="Selecione uma opção" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="google">Google</SelectItem>
+                        <SelectItem value="redes-sociais">Redes Sociais</SelectItem>
+                        <SelectItem value="indicacao">Indicação</SelectItem>
+                        <SelectItem value="outdoor">Outdoor/Publicidade</SelectItem>
+                        <SelectItem value="outro">Outro</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
@@ -184,7 +267,7 @@ const ContactSection = () => {
                     name="message"
                     value={formData.message}
                     onChange={handleInputChange}
-                    rows={5}
+                    rows={4}
                     className="bg-primary-foreground/10 border-primary-foreground/30 text-primary-foreground placeholder:text-primary-foreground/60 resize-none"
                     placeholder="Descreva seu projeto e suas necessidades..."
                     required
