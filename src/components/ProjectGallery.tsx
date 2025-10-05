@@ -50,7 +50,7 @@ const ProjectGallery = () => {
     },
   });
 
-  const handleViewGallery = (project: Project) => {
+  const handleViewGallery = (project: Project, startIndex: number = 0) => {
     setSelectedProject(project);
     
     // Convert gallery_images to proper format
@@ -108,16 +108,11 @@ const ProjectGallery = () => {
               </span>
             </h2>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, i) => (
-              <Card key={i} className="construction-card animate-pulse">
-                <div className="h-80 bg-muted rounded-t-lg"></div>
-                <CardContent className="p-6">
-                  <div className="h-6 bg-muted rounded mb-2"></div>
-                  <div className="h-4 bg-muted rounded mb-4"></div>
-                  <div className="h-4 bg-muted rounded w-3/4"></div>
-                </CardContent>
-              </Card>
+              <div key={i} className="relative overflow-hidden rounded-xl animate-pulse">
+                <div className="h-96 bg-muted"></div>
+              </div>
             ))}
           </div>
         </div>
@@ -148,74 +143,72 @@ const ProjectGallery = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
             {projects?.map((project, index) => {
               const statusInfo = getStatusBadge(project.status);
               const hasGallery = project.gallery_images && Array.isArray(project.gallery_images) && project.gallery_images.length > 0;
               const totalImages = (project.image_url ? 1 : 0) + (hasGallery ? project.gallery_images.length : 0);
 
               return (
-                <Card 
+                <div 
                   key={project.id} 
-                  className="group construction-card overflow-hidden h-full animate-fade-up hover:shadow-construction"
+                  className="group relative overflow-hidden rounded-xl animate-fade-up hover:shadow-2xl transition-all duration-500"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  {/* Project Image */}
-                  <div className="relative h-80 overflow-hidden">
+                  {/* Project Image - Clickable */}
+                  <div 
+                    className="relative h-96 overflow-hidden cursor-pointer"
+                    onClick={() => handleViewGallery(project, 0)}
+                  >
                     <img
                       src={project.image_url || '/api/placeholder/800/600'}
                       alt={project.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                       onError={(e) => {
                         e.currentTarget.src = '/api/placeholder/800/600?text=Projeto+CWDP';
                       }}
                     />
                     
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-500 flex items-center justify-center">
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="bg-white/90 backdrop-blur-sm rounded-full p-4">
+                          <Eye className="w-8 h-8 text-primary" />
+                        </div>
+                      </div>
+                    </div>
+                    
                     {/* Badges */}
-                    <div className="absolute top-4 left-4 flex gap-2">
-                      <Badge className={`font-medium ${statusInfo.color}`}>
+                    <div className="absolute top-4 left-4 flex gap-2 z-10">
+                      <Badge className={`font-medium shadow-lg ${statusInfo.color}`}>
                         {statusInfo.label}
                       </Badge>
                       {totalImages > 1 && (
-                        <Badge className="bg-primary/90 text-primary-foreground font-medium">
+                        <Badge className="bg-primary/90 text-primary-foreground font-medium shadow-lg backdrop-blur-sm">
                           <Eye className="w-3 h-3 mr-1" />
                           {totalImages} fotos
                         </Badge>
                       )}
                     </div>
                     
-                    {/* Gallery Button */}
-                    {totalImages > 0 && (
-                      <div className="absolute top-4 right-4">
-                        <Button
-                          size="sm"
-                          className="bg-black/20 hover:bg-black/40 text-white border-0 backdrop-blur-sm"
-                          onClick={() => handleViewGallery(project)}
-                        >
-                          <Eye className="w-4 h-4 mr-2" />
-                          Ver Galeria
-                        </Button>
-                      </div>
-                    )}
-                    
                     {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none" />
                     
                     {/* Project Info */}
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <h3 className="text-xl font-bold text-white mb-2">
+                    <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-0 group-hover:translate-y-0 transition-transform duration-500">
+                      <h3 className="text-2xl font-bold text-white mb-2 drop-shadow-lg">
                         {project.title}
                       </h3>
                       
                       {project.location && (
-                        <p className="text-white/90 text-sm flex items-center gap-1 mb-2">
-                          <MapPin className="h-3 w-3" />
+                        <p className="text-white/95 text-sm flex items-center gap-1 mb-2 drop-shadow">
+                          <MapPin className="h-4 w-4" />
                           {project.location}
                         </p>
                       )}
                       
                       {(project.start_date || project.end_date) && (
-                        <p className="text-white/80 text-xs flex items-center gap-1 mb-2">
+                        <p className="text-white/90 text-xs flex items-center gap-1 mb-3 drop-shadow">
                           <Calendar className="h-3 w-3" />
                           {project.start_date && new Date(project.start_date).getFullYear()}
                           {project.end_date && ` - ${new Date(project.end_date).getFullYear()}`}
@@ -223,13 +216,13 @@ const ProjectGallery = () => {
                       )}
                       
                       {project.description && (
-                        <p className="text-white/80 text-sm line-clamp-2">
+                        <p className="text-white/85 text-sm line-clamp-2 drop-shadow opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                           {project.description}
                         </p>
                       )}
                     </div>
                   </div>
-                </Card>
+                </div>
               );
             })}
           </div>
