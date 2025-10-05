@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Edit, Trash2, Calendar, Image, Eye } from "lucide-react";
-import GalleryModal from "@/components/GalleryModal";
+import ImageGallerySelector from "@/components/admin/ImageGallerySelector";
 
 interface Project {
   id: string;
@@ -163,9 +163,8 @@ const AdminProjects = () => {
     }
   };
 
-  const handleImageSelect = (image: any) => {
-    setFormData({ ...formData, image_url: image.image_url });
-    setIsGalleryOpen(false);
+  const handleImageSelect = (imageUrl: string) => {
+    setFormData({ ...formData, image_url: imageUrl });
   };
 
   const resetForm = () => {
@@ -404,14 +403,13 @@ const AdminProjects = () => {
         </Dialog>
       </div>
 
-      {/* Gallery Modal */}
-      <GalleryModal
+      {/* Image Gallery Selector */}
+      <ImageGallerySelector
         images={galleryImages}
-        currentIndex={0}
         isOpen={isGalleryOpen}
         onClose={() => setIsGalleryOpen(false)}
         onSelect={handleImageSelect}
-        selectMode={true}
+        selectedUrl={formData.image_url}
       />
 
       <div className="grid gap-4">
