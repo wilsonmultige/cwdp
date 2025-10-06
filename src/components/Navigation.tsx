@@ -29,6 +29,23 @@ const Navigation = () => {
     },
   });
 
+  // Fetch setting to show/hide projects section
+  const { data: showProjectsSetting } = useQuery({
+    queryKey: ['setting-show-projects'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('settings')
+        .select('value')
+        .eq('key', 'show_projects_section')
+        .single();
+      
+      if (error) return { value: 'false' };
+      return data;
+    },
+  });
+
+  const showProjects = showProjectsSetting?.value === 'true';
+
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY > 100;
@@ -39,13 +56,18 @@ const Navigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
+  const allNavItems = [
     { href: "#inicio", label: "Início" },
     { href: "#sobre", label: "Sobre" },
     { href: "#servicos", label: "Serviços" },
     { href: "#projetos", label: "Projetos" },
     { href: "#contato", label: "Contato" },
   ];
+
+  // Filter out projects link if section is hidden
+  const navItems = allNavItems.filter(item => 
+    item.href !== "#projetos" || showProjects
+  );
 
   const NavLink = ({ href, label, onClick }: { href: string; label: string; onClick?: () => void }) => (
     <a
