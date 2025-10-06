@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Save, Settings, Phone, Mail, MapPin, Clock, Image, Crown, Footprints } from "lucide-react";
+import { Loader2, Save, Settings, Phone, Mail, MapPin, Clock, Image, Crown, Footprints, Eye } from "lucide-react";
 import GalleryModal from "@/components/GalleryModal";
 
 interface Setting {
@@ -49,6 +50,11 @@ const AdminSettings = () => {
       title: "Logos",
       icon: Image,
       keys: ["site_logo_url", "footer_logo_url"]
+    },
+    {
+      title: "Visibilidade de Seções",
+      icon: Eye,
+      keys: ["show_projects_section"]
     },
     {
       title: "Contatos",
@@ -256,6 +262,25 @@ const AdminSettings = () => {
                       )}
                     </div>
                   </>
+                ) : group.title === "Visibilidade de Seções" ? (
+                  // Special handling for visibility toggles
+                  groupSettings.map((setting) => (
+                    <div key={setting.key} className="flex items-center justify-between space-y-2">
+                      <div className="space-y-0.5">
+                        <Label htmlFor={setting.key}>
+                          {setting.description || setting.key}
+                        </Label>
+                        <p className="text-sm text-muted-foreground">
+                          {setting.key === 'show_projects_section' && 'Ative para mostrar a galeria de projetos na página inicial'}
+                        </p>
+                      </div>
+                      <Switch
+                        id={setting.key}
+                        checked={getSettingValue(setting.key) === 'true'}
+                        onCheckedChange={(checked) => handleSettingChange(setting.key, checked ? 'true' : 'false')}
+                      />
+                    </div>
+                  ))
                 ) : (
                   // Default handling for other settings
                   groupSettings.map((setting) => (

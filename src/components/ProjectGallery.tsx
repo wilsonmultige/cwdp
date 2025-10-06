@@ -34,7 +34,7 @@ const ProjectGallery = () => {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
 
-  // Fetch projects
+  // Fetch projects (limit to 4 for 4x1 grid)
   const { data: projects, isLoading } = useQuery({
     queryKey: ['projects-featured'],
     queryFn: async () => {
@@ -43,7 +43,7 @@ const ProjectGallery = () => {
         .select('*')
         .eq('is_featured', true)
         .order('display_order')
-        .limit(6);
+        .limit(4);
       
       if (error) throw error;
       return data as Project[];
@@ -108,8 +108,8 @@ const ProjectGallery = () => {
               </span>
             </h2>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[...Array(4)].map((_, i) => (
               <div key={i} className="relative overflow-hidden rounded-xl animate-pulse">
                 <div className="h-96 bg-muted"></div>
               </div>
@@ -143,7 +143,7 @@ const ProjectGallery = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
             {projects?.map((project, index) => {
               const statusInfo = getStatusBadge(project.status);
               const hasGallery = project.gallery_images && Array.isArray(project.gallery_images) && project.gallery_images.length > 0;
@@ -227,13 +227,21 @@ const ProjectGallery = () => {
             })}
           </div>
 
-          {/* View More Section */}
+          {/* Contact CTA Section */}
           <div className="text-center animate-fade-up">
             <p className="text-lg text-muted-foreground mb-6">
-              Quer ver mais projetos e conhecer nosso portfólio completo?
+              Gostou do nosso trabalho? Entre em contato conosco!
             </p>
-            <Button variant="outline" className="group" size="lg">
-              Ver Todos os Projetos
+            <Button 
+              variant="outline" 
+              className="group" 
+              size="lg"
+              onClick={() => {
+                const contactSection = document.getElementById('contato');
+                contactSection?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              Solicite Orçamento do seu Projeto
               <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Button>
           </div>

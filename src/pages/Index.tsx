@@ -1,3 +1,5 @@
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
@@ -11,6 +13,23 @@ import Footer from "@/components/Footer";
 import FloatingContactButtons from "@/components/FloatingContactButtons";
 
 const Index = () => {
+  // Fetch setting to show/hide projects section
+  const { data: showProjectsSetting } = useQuery({
+    queryKey: ['setting-show-projects'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('settings')
+        .select('value')
+        .eq('key', 'show_projects_section')
+        .single();
+      
+      if (error) return { value: 'false' };
+      return data;
+    },
+  });
+
+  const showProjects = showProjectsSetting?.value === 'true';
+
   return (
     <div className="min-h-screen">
       <Navigation />
@@ -19,7 +38,7 @@ const Index = () => {
         <AboutSection />
         <StatsSection />
         <ServicesSection />
-        <ProjectGallery />
+        {showProjects && <ProjectGallery />}
         <PartnersSection />
         <ContactSection />
       </main>
