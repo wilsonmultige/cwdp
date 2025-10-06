@@ -26,13 +26,34 @@ const Footer = () => {
     },
   });
 
-  const quickLinks = [
+  // Fetch setting to show/hide projects section
+  const { data: showProjectsSetting } = useQuery({
+    queryKey: ['setting-show-projects'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('settings')
+        .select('value')
+        .eq('key', 'show_projects_section')
+        .single();
+      
+      if (error) return { value: 'false' };
+      return data;
+    },
+  });
+
+  const showProjects = showProjectsSetting?.value === 'true';
+
+  const allQuickLinks = [
     { name: "Início", href: "#inicio" },
     { name: "Sobre", href: "#sobre" },
     { name: "Serviços", href: "#servicos" },
     { name: "Projetos", href: "#projetos" },
     { name: "Contato", href: "#contato" }
   ];
+
+  const quickLinks = allQuickLinks.filter(link => 
+    link.name !== "Projetos" || showProjects
+  );
 
   const gdprLinks = [
     "Política de Privacidade",
@@ -169,12 +190,16 @@ const Footer = () => {
               © {currentYear} CWDP Construção. Todos os direitos reservados.
             </p>
           <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-6 text-sm">
-            <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
-              Política de Privacidade
-            </a>
-            <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
-              Termos de Serviço
-            </a>
+            <GDPRModal type="privacy">
+              <button className="text-primary-foreground/80 hover:text-accent transition-colors">
+                Política de Privacidade
+              </button>
+            </GDPRModal>
+            <GDPRModal type="terms">
+              <button className="text-primary-foreground/80 hover:text-accent transition-colors">
+                Termos de Serviço
+              </button>
+            </GDPRModal>
             <span className="text-primary-foreground/60">
               Site criado por{" "}
               <a 
