@@ -37,7 +37,7 @@ const Admin = () => {
         setUser(session?.user ?? null);
         
         if (!session) {
-          navigate("/auth");
+          navigate("/authcwdp");
         } else if (session.user) {
           // Defer profile fetching with setTimeout
           setTimeout(() => {
@@ -53,7 +53,7 @@ const Admin = () => {
       setUser(session?.user ?? null);
       
       if (!session) {
-        navigate("/auth");
+        navigate("/authcwdp");
       } else if (session.user) {
         fetchUserProfile(session.user.id);
       }

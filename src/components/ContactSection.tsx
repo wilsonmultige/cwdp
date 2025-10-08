@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 
 const ContactSection = () => {
   const { toast } = useToast();
@@ -24,6 +25,19 @@ const ContactSection = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Fetch contact email from admin settings
+  const { data: emailSetting } = useQuery({
+    queryKey: ['setting-contact-email'],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('settings')
+        .select('value')
+        .eq('key', 'contact_email')
+        .single();
+      return data?.value || "contato@cwdp.pt";
+    },
+  });
+
   const contactInfo = [
     {
       icon: Phone,
@@ -34,7 +48,7 @@ const ContactSection = () => {
     {
       icon: Mail,
       title: "Email",
-      details: ["contato@cwdp.pt", "info@cwdp.pt"],
+      details: [emailSetting || "contato@cwdp.pt"],
       action: "Enviar Email"
     },
     {
